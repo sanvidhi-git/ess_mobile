@@ -1,0 +1,259 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-10-18 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "sec_general",
+  "enable_app",
+  "bind_device",
+  "sec_mode",
+  "default_attendance_mode",
+  "sec_attendance",
+  "require_selfie",
+  "require_liveness",
+  "block_mock_location",
+  "block_rooted_devices",
+  "cb_att",
+  "max_accuracy_m",
+  "enforce_geofence",
+  "strict_alternate_logs",
+  "min_seconds_between_logs",
+  "sec_tracking",
+  "ping_interval_sec",
+  "min_distance_filter_m",
+  "cb_track",
+  "max_ping_accuracy_m",
+  "max_speed_kmph",
+  "min_segment_m",
+  "stale_trip_hours",
+  "sec_claim",
+  "travel_expense_type",
+  "rate_per_km",
+  "cb_claim",
+  "min_claim_km",
+  "max_claim_km_per_trip",
+  "sec_payroll",
+  "salary_slip_print_format"
+ ],
+ "fields": [
+  {
+   "fieldname": "sec_general",
+   "fieldtype": "Section Break",
+   "label": "General"
+  },
+  {
+   "fieldname": "enable_app",
+   "fieldtype": "Check",
+   "label": "Enable Mobile App",
+   "default": "1"
+  },
+  {
+   "fieldname": "bind_device",
+   "fieldtype": "Check",
+   "label": "Bind Employee to One Device",
+   "default": "1",
+   "description": "First login registers the device. HR must deactivate the ESS Device record to allow a new phone."
+  },
+  {
+   "fieldname": "sec_mode",
+   "fieldtype": "Section Break",
+   "label": "Attendance Mode"
+  },
+  {
+   "fieldname": "default_attendance_mode",
+   "fieldtype": "Select",
+   "label": "Default Attendance Mode",
+   "options": "Check-in Only\nLive Tracking",
+   "default": "Check-in Only",
+   "reqd": 1,
+   "description": "<b>Check-in Only</b>: employee marks IN and OUT with selfie + location; nothing is recorded in between.<br><b>Live Tracking</b>: same IN/OUT, plus the phone records the route from check-in until check-out (distance, live map, km-based travel claims).<br>Override per employee on the Employee form, <i>Mobile App</i> tab."
+  },
+  {
+   "fieldname": "sec_attendance",
+   "fieldtype": "Section Break",
+   "label": "Attendance Capture"
+  },
+  {
+   "fieldname": "require_selfie",
+   "fieldtype": "Check",
+   "label": "Require Selfie",
+   "default": "1"
+  },
+  {
+   "fieldname": "require_liveness",
+   "fieldtype": "Check",
+   "label": "Require Liveness (Blink) Check",
+   "default": "1"
+  },
+  {
+   "fieldname": "block_mock_location",
+   "fieldtype": "Check",
+   "label": "Block Mock / Fake GPS",
+   "default": "1"
+  },
+  {
+   "fieldname": "block_rooted_devices",
+   "fieldtype": "Check",
+   "label": "Block Rooted Devices / Emulators",
+   "default": "0"
+  },
+  {
+   "fieldname": "cb_att",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "max_accuracy_m",
+   "fieldtype": "Float",
+   "label": "Max GPS Accuracy for Check-in (m)",
+   "default": "100"
+  },
+  {
+   "fieldname": "enforce_geofence",
+   "fieldtype": "Check",
+   "label": "Enforce Geofence",
+   "default": "1",
+   "description": "Employees with 'Exempt from Geofence' ticked on their Employee record can check in anywhere."
+  },
+  {
+   "fieldname": "strict_alternate_logs",
+   "fieldtype": "Check",
+   "label": "Strictly Alternate IN / OUT",
+   "default": "1"
+  },
+  {
+   "fieldname": "min_seconds_between_logs",
+   "fieldtype": "Int",
+   "label": "Min Seconds Between Logs",
+   "default": "60"
+  },
+  {
+   "fieldname": "sec_tracking",
+   "fieldtype": "Section Break",
+   "label": "Live Tracking Settings",
+   "description": "Used only for employees in Live Tracking mode."
+  },
+  {
+   "fieldname": "ping_interval_sec",
+   "fieldtype": "Int",
+   "label": "Ping Interval (sec)",
+   "default": "60"
+  },
+  {
+   "fieldname": "min_distance_filter_m",
+   "fieldtype": "Int",
+   "label": "Device Distance Filter (m)",
+   "default": "25"
+  },
+  {
+   "fieldname": "cb_track",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "max_ping_accuracy_m",
+   "fieldtype": "Float",
+   "label": "Ignore Pings With Accuracy Worse Than (m)",
+   "default": "50"
+  },
+  {
+   "fieldname": "max_speed_kmph",
+   "fieldtype": "Float",
+   "label": "Ignore Jumps Faster Than (km/h)",
+   "default": "150"
+  },
+  {
+   "fieldname": "min_segment_m",
+   "fieldtype": "Float",
+   "label": "Ignore Movements Shorter Than (m)",
+   "default": "20"
+  },
+  {
+   "fieldname": "stale_trip_hours",
+   "fieldtype": "Int",
+   "label": "Auto-close Trips Open Longer Than (hours)",
+   "default": "18"
+  },
+  {
+   "fieldname": "sec_claim",
+   "fieldtype": "Section Break",
+   "label": "Travel Expense Claim"
+  },
+  {
+   "fieldname": "travel_expense_type",
+   "fieldtype": "Link",
+   "label": "Travel Expense Claim Type",
+   "options": "Expense Claim Type"
+  },
+  {
+   "fieldname": "rate_per_km",
+   "fieldtype": "Currency",
+   "label": "Rate per km"
+  },
+  {
+   "fieldname": "cb_claim",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "min_claim_km",
+   "fieldtype": "Float",
+   "label": "Minimum km to Claim",
+   "default": "1"
+  },
+  {
+   "fieldname": "max_claim_km_per_trip",
+   "fieldtype": "Float",
+   "label": "Max km per Trip (0 = no limit)",
+   "default": "0"
+  },
+  {
+   "fieldname": "sec_payroll",
+   "fieldtype": "Section Break",
+   "label": "Payslip"
+  },
+  {
+   "fieldname": "salary_slip_print_format",
+   "fieldtype": "Link",
+   "label": "Salary Slip Print Format",
+   "options": "Print Format"
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-10-19 10:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "ESS Mobile",
+ "name": "ESS Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "HR Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "issingle": 1
+}

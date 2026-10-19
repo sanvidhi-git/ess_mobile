@@ -1,0 +1,32 @@
+{
+ "doctype": "Report",
+ "name": "ESS Travel Summary",
+ "creation": "2026-10-19 09:00:00.000000",
+ "modified": "2026-10-19 09:00:00.000000",
+ "modified_by": "Administrator",
+ "owner": "Administrator",
+ "docstatus": 0,
+ "idx": 0,
+ "report_name": "ESS Travel Summary",
+ "ref_doctype": "ESS Trip",
+ "report_type": "Script Report",
+ "is_standard": "Yes",
+ "module": "ESS Mobile",
+ "add_total_row": 1,
+ "disabled": 0,
+ "prepared_report": 0,
+ "columns": [],
+ "filters": [],
+ "letterhead": null,
+ "roles": [
+  {
+   "role": "HR Manager"
+  },
+  {
+   "role": "HR User"
+  },
+  {
+   "role": "System Manager"
+  }
+ ]
+}

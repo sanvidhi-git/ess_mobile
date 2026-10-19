@@ -1,0 +1,173 @@
+{
+ "doctype": "DocType",
+ "name": "ESS Checkin Attempt",
+ "creation": "2026-10-19 09:00:00.000000",
+ "modified": "2026-10-19 09:00:00.000000",
+ "modified_by": "Administrator",
+ "owner": "Administrator",
+ "docstatus": 0,
+ "idx": 0,
+ "module": "ESS Mobile",
+ "autoname": "hash",
+ "naming_rule": "Random",
+ "title_field": "employee_name",
+ "sort_field": "attempt_time",
+ "sort_order": "DESC",
+ "engine": "InnoDB",
+ "in_create": 1,
+ "track_changes": 0,
+ "actions": [],
+ "links": [],
+ "states": [],
+ "field_order": [
+  "employee",
+  "employee_name",
+  "attempt_time",
+  "log_type",
+  "reason",
+  "message",
+  "cb1",
+  "latitude",
+  "longitude",
+  "accuracy",
+  "is_mocked",
+  "geofence",
+  "distance_m",
+  "device_id",
+  "sec_map",
+  "location_map"
+ ],
+ "fields": [
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "label": "Employee",
+   "options": "Employee",
+   "reqd": 1,
+   "read_only": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "label": "Employee Name",
+   "fetch_from": "employee.employee_name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "attempt_time",
+   "fieldtype": "Datetime",
+   "label": "Attempt Time",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "log_type",
+   "fieldtype": "Select",
+   "label": "Log Type",
+   "options": "\nIN\nOUT",
+   "read_only": 1
+  },
+  {
+   "fieldname": "reason",
+   "fieldtype": "Select",
+   "label": "Reason",
+   "options": "Mock Location\nRooted Device\nWeak GPS\nSelfie Missing\nLiveness Failed\nFace Check Failed\nOutside Geofence\nUnregistered Device",
+   "read_only": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "message",
+   "fieldtype": "Small Text",
+   "label": "Message Shown",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cb1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "latitude",
+   "fieldtype": "Float",
+   "label": "Latitude",
+   "precision": "7",
+   "read_only": 1
+  },
+  {
+   "fieldname": "longitude",
+   "fieldtype": "Float",
+   "label": "Longitude",
+   "precision": "7",
+   "read_only": 1
+  },
+  {
+   "fieldname": "accuracy",
+   "fieldtype": "Float",
+   "label": "GPS Accuracy (m)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "is_mocked",
+   "fieldtype": "Check",
+   "label": "Mock Location Reported",
+   "read_only": 1
+  },
+  {
+   "fieldname": "geofence",
+   "fieldtype": "Link",
+   "label": "Nearest Geofence",
+   "options": "ESS Geofence",
+   "read_only": 1
+  },
+  {
+   "fieldname": "distance_m",
+   "fieldtype": "Float",
+   "label": "Distance From Geofence Centre (m)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "device_id",
+   "fieldtype": "Data",
+   "label": "Device ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sec_map",
+   "fieldtype": "Section Break",
+   "label": "Location"
+  },
+  {
+   "fieldname": "location_map",
+   "fieldtype": "Geolocation",
+   "label": "Map",
+   "read_only": 1
+  }
+ ],
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1
+  },
+  {
+   "role": "HR Manager",
+   "read": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1
+  },
+  {
+   "role": "HR User",
+   "read": 1,
+   "report": 1,
+   "export": 1
+  }
+ ]
+}

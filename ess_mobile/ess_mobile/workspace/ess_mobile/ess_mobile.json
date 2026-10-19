@@ -1,0 +1,327 @@
+{
+ "doctype": "Workspace",
+ "name": "ESS Mobile",
+ "creation": "2026-10-19 09:00:00.000000",
+ "modified": "2026-10-19 09:00:00.000000",
+ "modified_by": "Administrator",
+ "owner": "Administrator",
+ "docstatus": 0,
+ "idx": 0,
+ "label": "ESS Mobile",
+ "title": "ESS Mobile",
+ "module": "ESS Mobile",
+ "app": "ess_mobile",
+ "icon": "smartphone",
+ "public": 1,
+ "is_hidden": 0,
+ "hide_custom": 0,
+ "for_user": "",
+ "parent_page": "",
+ "sequence_id": 30.0,
+ "standard": 1,
+ "type": "Workspace",
+ "content": "[{\"id\": \"ess0000001\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Today</b></span>\", \"col\": 12}}, {\"id\": \"ess0000002\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Mobile Check-ins (Today)\", \"col\": 3}}, {\"id\": \"ess0000003\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Active Trips\", \"col\": 3}}, {\"id\": \"ess0000004\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Travel km (This Month)\", \"col\": 3}}, {\"id\": \"ess0000005\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Registered Devices\", \"col\": 3}}, {\"id\": \"ess0000006\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Integrity &amp; claims</b></span>\", \"col\": 12}}, {\"id\": \"ess0000007\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Rejected Check-ins (Today)\", \"col\": 3}}, {\"id\": \"ess0000008\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Mock GPS Attempts (This Month)\", \"col\": 3}}, {\"id\": \"ess0000009\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Punches Outside Geofence (Today)\", \"col\": 3}}, {\"id\": \"ess0000010\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Unclaimed Trips (This Month)\", \"col\": 3}}, {\"id\": \"ess0000011\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Mobile Check-ins\", \"col\": 12}}, {\"id\": \"ess0000012\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Travel Distance (km)\", \"col\": 6}}, {\"id\": \"ess0000013\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Rejected Check-ins by Reason\", \"col\": 6}}, {\"id\": \"ess0000014\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Quick access</b></span>\", \"col\": 12}}, {\"id\": \"ess0000015\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Live Map\", \"col\": 3}}, {\"id\": \"ess0000016\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Attendance Register\", \"col\": 3}}, {\"id\": \"ess0000017\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Travel Summary\", \"col\": 3}}, {\"id\": \"ess0000018\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Rejected Attempts\", \"col\": 3}}, {\"id\": \"ess0000019\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Geofences\", \"col\": 3}}, {\"id\": \"ess0000020\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Registered Devices\", \"col\": 3}}, {\"id\": \"ess0000021\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Trips\", \"col\": 3}}, {\"id\": \"ess0000022\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"ESS Settings\", \"col\": 3}}]",
+ "roles": [
+  {
+   "role": "HR Manager"
+  },
+  {
+   "role": "HR User"
+  },
+  {
+   "role": "System Manager"
+  }
+ ],
+ "links": [],
+ "custom_blocks": [],
+ "quick_lists": [],
+ "shortcuts": [
+  {
+   "label": "Live Map",
+   "type": "Page",
+   "link_to": "ess-live-map",
+   "color": "Green"
+  },
+  {
+   "label": "Attendance Register",
+   "type": "Report",
+   "link_to": "ESS Attendance Register",
+   "report_ref_doctype": "Employee Checkin",
+   "color": "Blue"
+  },
+  {
+   "label": "Travel Summary",
+   "type": "Report",
+   "link_to": "ESS Travel Summary",
+   "report_ref_doctype": "ESS Trip",
+   "color": "Purple"
+  },
+  {
+   "label": "Rejected Attempts",
+   "type": "DocType",
+   "link_to": "ESS Checkin Attempt",
+   "doc_view": "List",
+   "color": "Red",
+   "stats_filter": "[[\"ESS Checkin Attempt\", \"attempt_time\", \"Timespan\", \"today\"]]"
+  },
+  {
+   "label": "Geofences",
+   "type": "DocType",
+   "link_to": "ESS Geofence",
+   "doc_view": "List",
+   "color": "Grey"
+  },
+  {
+   "label": "Registered Devices",
+   "type": "DocType",
+   "link_to": "ESS Device",
+   "doc_view": "List",
+   "color": "Grey"
+  },
+  {
+   "label": "Trips",
+   "type": "DocType",
+   "link_to": "ESS Trip",
+   "doc_view": "List",
+   "color": "Grey",
+   "stats_filter": "[[\"ESS Trip\", \"status\", \"=\", \"Active\"]]"
+  },
+  {
+   "label": "ESS Settings",
+   "type": "DocType",
+   "link_to": "ESS Settings",
+   "doc_view": "",
+   "color": "Grey"
+  }
+ ],
+ "number_cards": [
+  {
+   "label": "Mobile Check-ins (Today)",
+   "number_card_name": "Mobile Check-ins (Today)"
+  },
+  {
+   "label": "Active Trips",
+   "number_card_name": "Active Trips"
+  },
+  {
+   "label": "Travel km (This Month)",
+   "number_card_name": "Travel km (This Month)"
+  },
+  {
+   "label": "Registered Devices",
+   "number_card_name": "Registered Devices"
+  },
+  {
+   "label": "Rejected Check-ins (Today)",
+   "number_card_name": "Rejected Check-ins (Today)"
+  },
+  {
+   "label": "Mock GPS Attempts (This Month)",
+   "number_card_name": "Mock GPS Attempts (This Month)"
+  },
+  {
+   "label": "Punches Outside Geofence (Today)",
+   "number_card_name": "Punches Outside Geofence (Today)"
+  },
+  {
+   "label": "Unclaimed Trips (This Month)",
+   "number_card_name": "Unclaimed Trips (This Month)"
+  }
+ ],
+ "charts": [
+  {
+   "label": "Mobile Check-ins",
+   "chart_name": "Mobile Check-ins"
+  },
+  {
+   "label": "Travel Distance (km)",
+   "chart_name": "Travel Distance (km)"
+  },
+  {
+   "label": "Rejected Check-ins by Reason",
+   "chart_name": "Rejected Check-ins by Reason"
+  }
+ ],
+ "sidebar_items": [
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "house",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Home",
+   "link_to": "ESS Mobile",
+   "link_type": "Workspace",
+   "show_arrow": 0,
+   "type": "Link",
+   "open_in_new_tab": 1
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "map",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Live Map",
+   "link_to": "ess-live-map",
+   "link_type": "Page",
+   "show_arrow": 0,
+   "type": "Link",
+   "open_in_new_tab": 1
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "scan-face",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Mobile Check-ins",
+   "link_to": "Employee Checkin",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link",
+   "open_in_new_tab": 1
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "route",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Trips",
+   "link_to": "ESS Trip",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link",
+   "open_in_new_tab": 1
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "shield-alert",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Rejected Attempts",
+   "link_to": "ESS Checkin Attempt",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link",
+   "open_in_new_tab": 1
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "receipt-text",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Travel Claims",
+   "link_to": "Expense Claim",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link",
+   "open_in_new_tab": 1
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "notepad-text",
+   "indent": 1,
+   "keep_closed": 0,
+   "label": "Reports",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Section Break",
+   "open_in_new_tab": 1
+  },
+  {
+   "child": 1,
+   "collapsible": 1,
+   "icon": "",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Attendance Register",
+   "link_to": "ESS Attendance Register",
+   "link_type": "Report",
+   "show_arrow": 0,
+   "type": "Link",
+   "open_in_new_tab": 1
+  },
+  {
+   "child": 1,
+   "collapsible": 1,
+   "icon": "",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Travel Summary",
+   "link_to": "ESS Travel Summary",
+   "link_type": "Report",
+   "show_arrow": 0,
+   "type": "Link",
+   "open_in_new_tab": 1
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "database",
+   "indent": 1,
+   "keep_closed": 0,
+   "label": "Setup",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Section Break",
+   "open_in_new_tab": 1
+  },
+  {
+   "child": 1,
+   "collapsible": 1,
+   "icon": "",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Geofences",
+   "link_to": "ESS Geofence",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link",
+   "open_in_new_tab": 1
+  },
+  {
+   "child": 1,
+   "collapsible": 1,
+   "icon": "",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Registered Devices",
+   "link_to": "ESS Device",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link",
+   "open_in_new_tab": 1
+  },
+  {
+   "child": 1,
+   "collapsible": 1,
+   "icon": "",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Employees",
+   "link_to": "Employee",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link",
+   "open_in_new_tab": 1
+  },
+  {
+   "child": 0,
+   "collapsible": 1,
+   "icon": "settings",
+   "indent": 0,
+   "keep_closed": 0,
+   "label": "Settings",
+   "link_to": "ESS Settings",
+   "link_type": "DocType",
+   "show_arrow": 0,
+   "type": "Link",
+   "open_in_new_tab": 1
+  }
+ ]
+}

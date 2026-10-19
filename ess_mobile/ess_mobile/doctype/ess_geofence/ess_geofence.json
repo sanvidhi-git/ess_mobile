@@ -1,0 +1,143 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-10-18 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "geofence_name",
+  "enabled",
+  "company",
+  "branch",
+  "employee",
+  "cb1",
+  "latitude",
+  "longitude",
+  "radius_m",
+  "sec_map",
+  "location_map"
+ ],
+ "fields": [
+  {
+   "fieldname": "geofence_name",
+   "fieldtype": "Data",
+   "label": "Geofence Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled",
+   "default": "1"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "branch",
+   "fieldtype": "Link",
+   "label": "Branch",
+   "options": "Branch",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "description": "Leave blank to apply to all branches of the company."
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "label": "Employee",
+   "options": "Employee",
+   "description": "Optional: restrict this geofence to one employee (e.g. a site posting)."
+  },
+  {
+   "fieldname": "cb1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "latitude",
+   "fieldtype": "Float",
+   "label": "Latitude",
+   "reqd": 1,
+   "precision": "7"
+  },
+  {
+   "fieldname": "longitude",
+   "fieldtype": "Float",
+   "label": "Longitude",
+   "reqd": 1,
+   "precision": "7"
+  },
+  {
+   "fieldname": "radius_m",
+   "fieldtype": "Int",
+   "label": "Radius (m)",
+   "reqd": 1,
+   "default": "150",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "sec_map",
+   "fieldtype": "Section Break",
+   "label": "Map"
+  },
+  {
+   "fieldname": "location_map",
+   "fieldtype": "Geolocation",
+   "label": "Location",
+   "description": "Drop a marker to fill latitude/longitude automatically."
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-10-18 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "ESS Mobile",
+ "name": "ESS Geofence",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "HR Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "HR User",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "field:geofence_name",
+ "title_field": "geofence_name",
+ "naming_rule": "By fieldname"
+}

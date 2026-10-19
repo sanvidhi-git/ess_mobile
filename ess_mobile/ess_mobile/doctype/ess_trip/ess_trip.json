@@ -1,0 +1,193 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-10-18 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "employee",
+  "employee_name",
+  "status",
+  "trip_date",
+  "cb1",
+  "start_time",
+  "end_time",
+  "start_checkin",
+  "end_checkin",
+  "sec_distance",
+  "distance_km",
+  "total_pings",
+  "accepted_pings",
+  "cb2",
+  "expense_claim",
+  "claimed_km",
+  "sec_route",
+  "route"
+ ],
+ "fields": [
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "label": "Employee",
+   "options": "Employee",
+   "reqd": 1,
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "label": "Employee Name",
+   "fetch_from": "employee.employee_name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Active\nCompleted\nAuto Closed",
+   "default": "Active",
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "trip_date",
+   "fieldtype": "Date",
+   "label": "Date",
+   "in_list_view": 1,
+   "in_standard_filter": 1
+  },
+  {
+   "fieldname": "cb1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "start_time",
+   "fieldtype": "Datetime",
+   "label": "Start Time",
+   "read_only": 1
+  },
+  {
+   "fieldname": "end_time",
+   "fieldtype": "Datetime",
+   "label": "End Time",
+   "read_only": 1
+  },
+  {
+   "fieldname": "start_checkin",
+   "fieldtype": "Link",
+   "label": "Start Check-in",
+   "options": "Employee Checkin",
+   "read_only": 1
+  },
+  {
+   "fieldname": "end_checkin",
+   "fieldtype": "Link",
+   "label": "End Check-in",
+   "options": "Employee Checkin",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sec_distance",
+   "fieldtype": "Section Break",
+   "label": "Distance"
+  },
+  {
+   "fieldname": "distance_km",
+   "fieldtype": "Float",
+   "label": "Distance (km)",
+   "read_only": 1,
+   "in_list_view": 1,
+   "precision": "2"
+  },
+  {
+   "fieldname": "total_pings",
+   "fieldtype": "Int",
+   "label": "Pings Received",
+   "read_only": 1
+  },
+  {
+   "fieldname": "accepted_pings",
+   "fieldtype": "Int",
+   "label": "Pings Used",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cb2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "expense_claim",
+   "fieldtype": "Link",
+   "label": "Expense Claim",
+   "options": "Expense Claim",
+   "read_only": 1
+  },
+  {
+   "fieldname": "claimed_km",
+   "fieldtype": "Float",
+   "label": "Claimed km",
+   "read_only": 1,
+   "precision": "2"
+  },
+  {
+   "fieldname": "sec_route",
+   "fieldtype": "Section Break",
+   "label": "Route"
+  },
+  {
+   "fieldname": "route",
+   "fieldtype": "Geolocation",
+   "label": "Route",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 0,
+ "links": [],
+ "modified": "2026-10-18 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "ESS Mobile",
+ "name": "ESS Trip",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "role": "System Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "HR Manager",
+   "read": 1,
+   "write": 1,
+   "create": 1,
+   "delete": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1,
+   "email": 1,
+   "share": 1
+  },
+  {
+   "role": "HR User",
+   "read": 1,
+   "report": 1,
+   "export": 1,
+   "print": 1
+  }
+ ],
+ "sort_field": "start_time",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "autoname": "format:TRIP-{YYYY}-{#####}",
+ "title_field": "employee_name",
+ "naming_rule": "Expression"
+}
