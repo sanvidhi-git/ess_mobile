@@ -26,7 +26,7 @@ def current_employee(fields: list[str] | None = None) -> frappe._dict:
         raise frappe.AuthenticationError
     base = ["name", "employee_name", "company", "branch", "department", "designation",
             "holiday_list", "leave_approver", "expense_approver", "image", "user_id",
-            "ess_geofence_exempt", "ess_attendance_mode"]
+            "ess_geofence_exempt", "ess_attendance_mode", "ess_transport_mode"]
     emp = frappe.db.get_value(
         "Employee",
         {"user_id": frappe.session.user, "status": "Active"},

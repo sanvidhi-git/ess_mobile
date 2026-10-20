@@ -50,7 +50,13 @@ class ESSLiveMap {
 		this.inject_css();
 
 		Promise.all([frappe.require("leaflet.bundle.js"), frappe.require("leaflet.bundle.css")]).then(() => {
-			this.init_map();
+			try {
+				this.init_map();
+			} catch (e) {
+				console.error("ESS Live Map: map setup failed", e);
+				this.$body.find(".ess-map").html(
+					`<div class="text-muted text-center p-4">${__("The map could not be drawn; the employee list below is still current.")}</div>`);
+			}
 			this.load();
 			this.schedule();
 		});
@@ -62,11 +68,29 @@ class ESSLiveMap {
 	init_map() {
 		const el = this.$body.find(".ess-map")[0];
 		this.map = L.map(el, { zoomControl: true }).setView([20.59, 78.96], 5);
+		// v16: map_defaults.tiles is {default_tile: {url, options}, satellite_tile: {...}};
+		// older Frappe: tiles is a URL string with options alongside.
 		const defaults = frappe.utils.map_defaults || {};
-		L.tileLayer(defaults.tiles || "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", defaults.options || {
-			maxZoom: 19,
-			attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-		}).addTo(this.map);
+		const osm = {
+			url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+			options: { maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' },
+		};
+		let layers = {};
+		if (defaults.tiles && typeof defaults.tiles === "object") {
+			// Only the street and satellite base maps; the other v16 entries are Stadia overlays
+			// that need an API key on a public domain.
+			for (const [key, label] of [["default_tile", __("Map")], ["satellite_tile", __("Satellite")]]) {
+				const t = defaults.tiles[key];
+				if (t && typeof t.url === "string") {
+					layers[label] = L.tileLayer(t.url, Object.assign({ maxZoom: 19 }, t.options || {}));
+				}
+			}
+		} else if (typeof defaults.tiles === "string") {
+			layers[__("Map")] = L.tileLayer(defaults.tiles, defaults.options || osm.options);
+		}
+		if (!Object.keys(layers).length) layers[__("Map")] = L.tileLayer(osm.url, osm.options);
+		Object.values(layers)[0].addTo(this.map);
+		if (Object.keys(layers).length > 1) L.control.layers(layers, null, { position: "topright" }).addTo(this.map);
 		this.layer = L.featureGroup().addTo(this.map);
 		this.fence_layer = L.featureGroup().addTo(this.map);
 		setTimeout(() => this.map.invalidateSize(), 300);
@@ -82,7 +106,6 @@ class ESSLiveMap {
 	}
 
 	load(silent) {
-		if (!this.map) return;
 		frappe.call({
 			method: "ess_mobile.api.admin.live_map_data",
 			args: {
@@ -96,15 +119,19 @@ class ESSLiveMap {
 	}
 
 	render(data, keep_view) {
-		this.layer.clearLayers();
-		this.fence_layer.clearLayers();
+		const hasMap = !!(this.map && this.layer);
+		// Without a map, collect markers into throwaway groups so the stats and list still render.
+		const layer = hasMap ? this.layer : L.featureGroup();
+		const fences = hasMap ? this.fence_layer : L.featureGroup();
+		layer.clearLayers();
+		fences.clearLayers();
 		this.markers = {};
 		const emps = data.employees || [];
 
 		(data.geofences || []).forEach((g) => {
 			L.circle([g.latitude, g.longitude], {
 				radius: g.radius_m, color: "#0F766E", weight: 1, fillOpacity: 0.08,
-			}).bindTooltip(frappe.utils.escape_html(g.name)).addTo(this.fence_layer);
+			}).bindTooltip(frappe.utils.escape_html(g.name)).addTo(fences);
 		});
 
 		let checked_in = 0, on_trip = 0, km = 0, outside = 0;
@@ -116,12 +143,12 @@ class ESSLiveMap {
 				if (t.route && t.route.length > 1) {
 					L.polyline(t.route, { color: t.status === "Active" ? "#2490EF" : "#7575FF", weight: 4, opacity: 0.7 })
 						.bindTooltip(`${frappe.utils.escape_html(e.employee_name)} · ${t.distance_km} km`)
-						.addTo(this.layer);
+						.addTo(layer);
 				}
 				if (t.status === "Active" && t.last) {
 					const m = L.circleMarker([t.last.lat, t.last.lng], {
 						radius: 9, color: "#fff", weight: 2, fillColor: "#2490EF", fillOpacity: 1,
-					}).bindPopup(this.popup_trip(e, t)).addTo(this.layer);
+					}).bindPopup(this.popup_trip(e, t)).addTo(layer);
 					this.markers[e.employee] = m;
 				}
 			});
@@ -131,7 +158,7 @@ class ESSLiveMap {
 				const m = L.circleMarker([p.lat, p.lng], {
 					radius: 7, color: "#fff", weight: 2,
 					fillColor: p.type === "IN" ? "#28A745" : "#E24C4C", fillOpacity: 1,
-				}).bindPopup(this.popup_punch(e, p)).addTo(this.layer);
+				}).bindPopup(this.popup_punch(e, p)).addTo(layer);
 				if (!this.markers[e.employee]) this.markers[e.employee] = m;
 			});
 		});
@@ -145,6 +172,7 @@ class ESSLiveMap {
 		`);
 		this.render_list(emps);
 
+		if (!hasMap) return;
 		const bounds = this.layer.getBounds();
 		if (!keep_view) {
 			if (bounds.isValid()) this.map.fitBounds(bounds.pad(0.15), { maxZoom: 16 });
@@ -184,7 +212,7 @@ class ESSLiveMap {
 				</div>`)
 				.on("click", () => {
 					const m = this.markers[e.employee];
-					if (m) {
+					if (m && this.map) {
 						this.map.setView(m.getLatLng(), 16);
 						m.openPopup();
 					}

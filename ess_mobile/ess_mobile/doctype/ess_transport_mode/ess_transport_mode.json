@@ -1,0 +1,69 @@
+{
+ "actions": [],
+ "creation": "2026-10-20 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "istable": 1,
+ "field_order": [
+  "mode",
+  "rate_per_km",
+  "uses_odometer",
+  "expense_claim_type",
+  "enabled"
+ ],
+ "fields": [
+  {
+   "fieldname": "mode",
+   "fieldtype": "Data",
+   "label": "Mode of Transport",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 3
+  },
+  {
+   "fieldname": "rate_per_km",
+   "fieldtype": "Currency",
+   "label": "Rate per km",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "uses_odometer",
+   "fieldtype": "Check",
+   "label": "Own Vehicle (Odometer)",
+   "in_list_view": 1,
+   "columns": 2,
+   "description": "Ask for odometer readings at check-in and check-out when this is the employee's mode."
+  },
+  {
+   "fieldname": "expense_claim_type",
+   "fieldtype": "Link",
+   "label": "Expense Claim Type",
+   "options": "Expense Claim Type",
+   "in_list_view": 1,
+   "columns": 2,
+   "description": "Blank = the Travel Expense Claim Type below."
+  },
+  {
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled",
+   "default": "1",
+   "in_list_view": 1,
+   "columns": 1
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-20 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "ESS Mobile",
+ "name": "ESS Transport Mode",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "creation",
+ "sort_order": "ASC",
+ "states": [],
+ "track_changes": 0
+}

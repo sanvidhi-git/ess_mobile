@@ -100,8 +100,12 @@ def _bootstrap(emp):
     s = settings()
     from ess_mobile.api.tracking import attendance_mode
 
+    from ess_mobile.api.transport import employee_mode, modes, odometer_applies
+
     mode = attendance_mode(emp)
     tracking = mode == "Live Tracking"
+    tmodes = modes(s)
+    my_mode = employee_mode(emp, s)
     return {
         "server_time": str(now_datetime()),
         "employee": {
@@ -125,8 +129,14 @@ def _bootstrap(emp):
             "tracking_enabled": cint(tracking),
             "ping_interval_sec": cint(s.ping_interval_sec) or 60,
             "min_distance_filter_m": cint(s.min_distance_filter_m) or 25,
-            "rate_per_km": s.rate_per_km or 0,
-            "travel_claim_enabled": cint(bool(s.travel_expense_type and s.rate_per_km)),
+            "rate_per_km": (my_mode or {}).get("rate_per_km") or s.rate_per_km or 0,
+            "travel_claim_enabled": cint(any(m["expense_claim_type"] and m["rate_per_km"] for m in tmodes)
+                                         or bool(s.travel_expense_type and s.rate_per_km)),
+            "transport_modes": [{"mode": m["mode"], "rate_per_km": m["rate_per_km"],
+                                 "uses_odometer": m["uses_odometer"]} for m in tmodes],
+            "transport_mode": (my_mode or {}).get("mode"),
+            "odometer_capture": s.get("odometer_capture") or "Off",
+            "odometer_applies": cint(tracking and odometer_applies(emp, s)),
         },
         "geofences": applicable_geofences(emp),
         "today": today_status(emp),

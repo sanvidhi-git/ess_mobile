@@ -23,7 +23,8 @@ def execute(filters=None):
         "ESS Trip",
         filters={"employee": ["in", list(employees)], "trip_date": ["between", [f.from_date, f.to_date]]},
         fields=["name", "employee", "trip_date", "status", "start_time", "end_time", "distance_km",
-                "accepted_pings", "total_pings", "expense_claim", "claimed_km"],
+                "accepted_pings", "total_pings", "expense_claim", "claimed_km", "transport_mode", "odometer_km",
+                "personal_km"],
         order_by="trip_date desc, start_time desc",
     )
     claims = {}
@@ -70,6 +71,8 @@ def _trip_rows(trips, employees, claims):
             "trip": t.name, "trip_date": t.trip_date, "employee": t.employee,
             "employee_name": employees[t.employee].employee_name, "status": t.status,
             "start_time": t.start_time, "end_time": t.end_time, "km": flt(t.distance_km, 2),
+            "odometer_km": flt(t.odometer_km, 1) or None, "personal_km": flt(t.personal_km, 2) or None,
+            "transport_mode": t.transport_mode,
             "pings": f"{cint(t.accepted_pings)} / {cint(t.total_pings)}", "expense_claim": t.expense_claim,
             "claimed_km": flt(t.claimed_km, 2), "claimed_amount": flt(c.total_claimed_amount) if c else 0,
             "claim_status": (c.approval_status if c.docstatus != 2 else "Cancelled") if c else "",
@@ -133,6 +136,9 @@ def _trip_columns():
         {"fieldname": "start_time", "label": _("Start"), "fieldtype": "Datetime", "width": 150},
         {"fieldname": "end_time", "label": _("End"), "fieldtype": "Datetime", "width": 150},
         {"fieldname": "km", "label": _("km"), "fieldtype": "Float", "precision": 2, "width": 90},
+        {"fieldname": "odometer_km", "label": _("Odometer km"), "fieldtype": "Float", "precision": 1, "width": 110},
+        {"fieldname": "personal_km", "label": _("Personal km"), "fieldtype": "Float", "precision": 2, "width": 100},
+        {"fieldname": "transport_mode", "label": _("Mode"), "fieldtype": "Data", "width": 110},
         {"fieldname": "pings", "label": _("Pings Used / Received"), "fieldtype": "Data", "width": 150},
         {"fieldname": "expense_claim", "label": _("Expense Claim"), "fieldtype": "Link", "options": "Expense Claim",
          "width": 150},

@@ -6,6 +6,9 @@ from ess_mobile.setup.custom_fields import make_custom_fields
 def after_install():
     make_custom_fields()
     _default_settings()
+    from ess_mobile.api.transport import seed_defaults
+
+    seed_defaults()
 
 
 def after_migrate():

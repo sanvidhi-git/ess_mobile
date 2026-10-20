@@ -18,7 +18,18 @@
   "distance_km",
   "total_pings",
   "accepted_pings",
-  "cb2",
+  "sec_odometer",
+  "odometer_start",
+  "odometer_start_photo",
+  "cb_odo",
+  "odometer_end",
+  "odometer_end_photo",
+  "odometer_km",
+  "sec_claim",
+  "transport_mode",
+  "rate_per_km",
+  "cb_claim",
+  "personal_km",
   "expense_claim",
   "claimed_km",
   "sec_route",
@@ -114,8 +125,74 @@
    "read_only": 1
   },
   {
-   "fieldname": "cb2",
+   "fieldname": "sec_odometer",
+   "fieldtype": "Section Break",
+   "label": "Odometer"
+  },
+  {
+   "fieldname": "odometer_start",
+   "fieldtype": "Float",
+   "label": "Odometer at Check-in",
+   "precision": "1",
+   "read_only": 1
+  },
+  {
+   "fieldname": "odometer_start_photo",
+   "fieldtype": "Attach Image",
+   "label": "Check-in Odometer Photo",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cb_odo",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "odometer_end",
+   "fieldtype": "Float",
+   "label": "Odometer at Check-out",
+   "precision": "1",
+   "read_only": 1
+  },
+  {
+   "fieldname": "odometer_end_photo",
+   "fieldtype": "Attach Image",
+   "label": "Check-out Odometer Photo",
+   "read_only": 1
+  },
+  {
+   "fieldname": "odometer_km",
+   "fieldtype": "Float",
+   "label": "Odometer Distance (km)",
+   "precision": "1",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sec_claim",
+   "fieldtype": "Section Break",
+   "label": "Travel Claim"
+  },
+  {
+   "fieldname": "transport_mode",
+   "fieldtype": "Data",
+   "label": "Mode of Transport",
+   "read_only": 1
+  },
+  {
+   "fieldname": "rate_per_km",
+   "fieldtype": "Currency",
+   "label": "Rate per km",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cb_claim",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "personal_km",
+   "fieldtype": "Float",
+   "label": "Personal km Deducted",
+   "precision": "2",
+   "read_only": 1
   },
   {
    "fieldname": "expense_claim",
@@ -145,7 +222,7 @@
  ],
  "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2026-10-18 12:00:00.000000",
+ "modified": "2026-10-20 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "ESS Mobile",
  "name": "ESS Trip",

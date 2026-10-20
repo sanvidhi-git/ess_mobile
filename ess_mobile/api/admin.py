@@ -132,14 +132,15 @@ def recompute_trip(trip: str):
 
 
 @frappe.whitelist(methods=["POST"])
-def create_travel_claim(trip: str, description: str | None = None):
-    """HR raises the travel claim on the employee's behalf."""
+def create_travel_claim(trip: str, description: str | None = None, transport_mode: str | None = None,
+                        claim_km: float | None = None, personal_km: float | None = None):
+    """HR raises the travel claim on the employee's behalf (same limits as the app)."""
     _require_hr()
-    from ess_mobile.api.expense import make_travel_claim
+    from ess_mobile.api.expense import _trip_and_employee, make_travel_claim
 
-    t = frappe.get_doc("ESS Trip", trip)
-    emp = frappe.db.get_value("Employee", t.employee, ["name", "company", "expense_approver"], as_dict=True)
-    return make_travel_claim(emp, t, description)
+    t, emp = _trip_and_employee(trip)
+    return make_travel_claim(emp, t, description, transport_mode=transport_mode, claim_km=claim_km,
+                             personal_km=personal_km)
 
 
 @frappe.whitelist(methods=["POST"])

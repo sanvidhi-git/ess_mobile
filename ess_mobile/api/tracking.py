@@ -178,7 +178,7 @@ def get_trips(limit: int = 30, start: int = 0):
         "ESS Trip",
         filters={"employee": emp.name},
         fields=["name", "status", "trip_date", "start_time", "end_time", "distance_km", "expense_claim",
-                "claimed_km"],
+                "claimed_km", "odometer_start", "odometer_end", "odometer_km", "transport_mode", "personal_km"],
         order_by="start_time desc",
         limit_start=cint(start),
         limit_page_length=min(cint(limit) or 30, 100),

@@ -62,7 +62,7 @@ def _last_log(employee):
         "Employee Checkin",
         filters={"employee": employee},
         fields=["name", "log_type", "time"],
-        order_by="time desc",
+        order_by="time desc, creation desc",
         limit=1,
     )
     return rows[0] if rows else None
@@ -79,7 +79,7 @@ def today_status(emp) -> dict:
     last = _last_log(emp.name)
     next_type = "OUT" if last and last.log_type == "IN" and _hours_since(last.time) < 20 else "IN"
     trip = frappe.db.get_value("ESS Trip", {"employee": emp.name, "status": "Active"},
-                               ["name", "start_time", "distance_km"], as_dict=True)
+                               ["name", "start_time", "distance_km", "odometer_start"], as_dict=True)
     first_in = next((l.time for l in logs if l.log_type == "IN"), None)
     last_out = next((l.time for l in reversed(logs) if l.log_type == "OUT"), None)
     worked = 0
@@ -102,7 +102,8 @@ def today_status(emp) -> dict:
         "logs": [{"name": l.name, "type": l.log_type, "time": str(l.time),
                   "geofence": l.ess_geofence, "inside": cint(l.ess_within_geofence)} for l in logs],
         "active_trip": {"name": trip.name, "start_time": str(trip.start_time),
-                        "distance_km": flt(trip.distance_km, 2)} if trip else None,
+                        "distance_km": flt(trip.distance_km, 2),
+                        "odometer_start": flt(trip.odometer_start, 1) if trip.odometer_start else None} if trip else None,
     }
 
 
@@ -120,7 +121,8 @@ def get_today():
 @frappe.whitelist(methods=["POST"])
 def checkin(log_type: str, latitude: float, longitude: float, accuracy: float | None = None,
             is_mocked: int = 0, is_rooted: int = 0, selfie: str | None = None,
-            face_count: int | None = None, liveness_passed: int = 0, device_id: str | None = None):
+            face_count: int | None = None, liveness_passed: int = 0, device_id: str | None = None,
+            odometer_reading: float | None = None, odometer_photo: str | None = None):
     ensure_enabled()
     s = settings()
     emp = current_employee()
@@ -181,6 +183,27 @@ def checkin(log_type: str, latitude: float, longitude: float, accuracy: float | 
             geofence=fence["name"], distance_m=flt(dist, 1),
         )
 
+    # --- odometer (Live Tracking + own-vehicle mode): validate before anything is saved
+    from ess_mobile.api.tracking import tracking_enabled_for
+    from ess_mobile.api.transport import odometer_applies
+
+    odo = flt(odometer_reading) if odometer_reading not in (None, "") else None
+    open_trip = frappe.db.get_value("ESS Trip", {"employee": emp.name, "status": "Active"},
+                                    ["name", "odometer_start"], as_dict=True, order_by="start_time desc")
+    if odo is not None and odo < 0:
+        frappe.throw(_("Odometer reading cannot be negative."), title=_("Odometer"))
+    if log_type == "IN" and tracking_enabled_for(emp) and odometer_applies(emp, s):
+        if s.odometer_capture == "Required" and (odo is None or not odometer_photo):
+            frappe.throw(_("Enter the odometer reading and take a photo of the odometer to check in."),
+                         title=_("Odometer Required"))
+    if log_type == "OUT" and open_trip and open_trip.odometer_start is not None and flt(open_trip.odometer_start) > 0:
+        if odo is None and s.odometer_capture == "Required":
+            frappe.throw(_("Enter the odometer reading at check-out (it was {0} at check-in).")
+                         .format(flt(open_trip.odometer_start, 1)), title=_("Odometer Required"))
+        if odo is not None and odo < flt(open_trip.odometer_start):
+            frappe.throw(_("Check-out odometer {0} is lower than the check-in reading {1}.")
+                         .format(flt(odo, 1), flt(open_trip.odometer_start, 1)), title=_("Odometer"))
+
     # --- create the checkin
     doc = frappe.new_doc("Employee Checkin")
     meta = doc.meta
@@ -217,7 +240,7 @@ def checkin(log_type: str, latitude: float, longitude: float, accuracy: float | 
     # --- live tracking: IN starts a trip only in Live Tracking mode; OUT closes any open trip,
     # so a trip ends cleanly even if HR switched the employee's mode during the day.
     trip = None
-    from ess_mobile.api.tracking import close_open_trips, end_trip, start_trip, tracking_enabled_for
+    from ess_mobile.api.tracking import close_open_trips, end_trip, start_trip
 
     point = {"latitude": latitude, "longitude": longitude, "accuracy": accuracy, "is_mocked": cint(is_mocked)}
     if log_type == "IN":
@@ -229,6 +252,8 @@ def checkin(log_type: str, latitude: float, longitude: float, accuracy: float | 
         trip = end_trip(emp, doc, point)
     if trip:
         doc.db_set("ess_trip", trip.name, update_modified=False)
+        if odo is not None:
+            _save_odometer(trip, log_type, odo, odometer_photo, emp.name, doc.time)
 
     return {
         "checkin": doc.name,
@@ -240,6 +265,22 @@ def checkin(log_type: str, latitude: float, longitude: float, accuracy: float | 
         "trip": {"name": trip.name, "status": trip.status, "distance_km": flt(trip.distance_km, 2)} if trip else None,
         "today": today_status(emp),
     }
+
+
+def _save_odometer(trip, log_type: str, reading: float, photo_b64: str | None, employee: str, at):
+    which = "start" if log_type == "IN" else "end"
+    url = None
+    if photo_b64:
+        url = save_base64_file(photo_b64, f"odometer-{which}-{employee}-{at.strftime('%Y%m%d-%H%M%S')}.jpg",
+                               "ESS Trip", trip.name, f"odometer_{which}_photo")
+    values = {f"odometer_{which}": reading}
+    if url:
+        values[f"odometer_{which}_photo"] = url
+    start = reading if which == "start" else flt(frappe.db.get_value("ESS Trip", trip.name, "odometer_start"))
+    end = reading if which == "end" else None
+    if end is not None and start:
+        values["odometer_km"] = flt(end - start, 1)
+    frappe.db.set_value("ESS Trip", trip.name, values, update_modified=False)
 
 
 # ---------------------------------------------------------------- history

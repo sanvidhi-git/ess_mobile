@@ -50,6 +50,10 @@ EMPLOYEE_FIELDS = [
      "options": "\nCheck-in Only\nLive Tracking", "in_standard_filter": 1,
      "description": "Blank = company default from ESS Settings. Check-in Only: selfie + location at IN and OUT. "
                     "Live Tracking: also records the route from check-in to check-out."},
+    {"fieldname": "ess_transport_mode", "fieldtype": "Select", "label": "Mode of Transport",
+     "options": "", "in_standard_filter": 1,
+     "description": "Default for this employee's travel claims (rates are in ESS Settings). "
+                    "Blank = ESS Settings default. The employee can pick another mode when claiming."},
 ]
 
 EXPENSE_CLAIM_FIELDS = [
@@ -58,6 +62,7 @@ EXPENSE_CLAIM_FIELDS = [
 
 
 def make_custom_fields():
+    keep = frappe.db.get_value("Custom Field", {"dt": "Employee", "fieldname": "ess_transport_mode"}, "options")
     create_custom_fields(
         {
             "Employee Checkin": _chain("Employee Checkin", CHECKIN_FIELDS),
@@ -66,3 +71,5 @@ def make_custom_fields():
         },
         update=True,
     )
+    if keep:
+        frappe.db.set_value("Custom Field", {"dt": "Employee", "fieldname": "ess_transport_mode"}, "options", keep)

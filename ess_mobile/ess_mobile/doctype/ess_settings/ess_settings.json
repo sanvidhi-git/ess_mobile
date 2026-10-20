@@ -29,6 +29,11 @@
   "min_segment_m",
   "stale_trip_hours",
   "sec_claim",
+  "transport_modes",
+  "default_transport_mode",
+  "claim_tolerance_pct",
+  "cb_claim2",
+  "odometer_capture",
   "travel_expense_type",
   "rate_per_km",
   "cb_claim",
@@ -180,15 +185,50 @@
    "label": "Travel Expense Claim"
   },
   {
+   "fieldname": "transport_modes",
+   "fieldtype": "Table",
+   "label": "Modes of Transport",
+   "options": "ESS Transport Mode",
+   "description": "Rate per km for each mode. Set each employee's usual mode on the Employee form (Mobile App tab)."
+  },
+  {
+   "fieldname": "default_transport_mode",
+   "fieldtype": "Data",
+   "label": "Default Mode of Transport",
+   "description": "Used for employees with no mode set. Must match a mode in the table above."
+  },
+  {
+   "fieldname": "claim_tolerance_pct",
+   "fieldtype": "Percent",
+   "label": "Allow Claim Above Tracked Distance (%)",
+   "default": "0",
+   "description": "0 = the claimed km can never exceed the km recorded by live tracking."
+  },
+  {
+   "fieldname": "cb_claim2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "odometer_capture",
+   "fieldtype": "Select",
+   "label": "Odometer Reading at Check-in / Check-out",
+   "options": "Off\nOptional\nRequired",
+   "default": "Optional",
+   "description": "Applies to Live Tracking employees whose mode is an own vehicle. Reading + photo at check-in and check-out; the difference is suggested as the claim distance."
+  },
+  {
    "fieldname": "travel_expense_type",
    "fieldtype": "Link",
    "label": "Travel Expense Claim Type",
-   "options": "Expense Claim Type"
+   "options": "Expense Claim Type",
+   "description": "Default claim type for travel claims; a mode of transport can override it."
   },
   {
    "fieldname": "rate_per_km",
    "fieldtype": "Currency",
-   "label": "Rate per km"
+   "label": "Fallback Rate per km",
+   "hidden": 1,
+   "description": "Used only if a mode of transport has no rate."
   },
   {
    "fieldname": "cb_claim",
@@ -220,7 +260,7 @@
  ],
  "index_web_pages_for_search": 0,
  "links": [],
- "modified": "2026-10-19 10:00:00.000000",
+ "modified": "2026-10-20 12:00:00.000000",
  "modified_by": "Administrator",
  "module": "ESS Mobile",
  "name": "ESS Settings",

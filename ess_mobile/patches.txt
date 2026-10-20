@@ -2,3 +2,4 @@
 
 [post_model_sync]
 ess_mobile.patches.v1_2.attendance_mode
+ess_mobile.patches.v1_3.transport_modes
