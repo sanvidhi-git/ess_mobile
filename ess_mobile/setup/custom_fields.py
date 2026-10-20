@@ -60,6 +60,11 @@ EXPENSE_CLAIM_FIELDS = [
     {"fieldname": "ess_trip", "fieldtype": "Link", "label": "Travel Trip", "options": "ESS Trip", "read_only": 1},
 ]
 
+EXPENSE_CLAIM_DETAIL_FIELDS = [
+    {"fieldname": "ess_trip", "fieldtype": "Link", "label": "Trip", "options": "ESS Trip", "read_only": 1,
+     "in_list_view": 0},
+]
+
 
 def make_custom_fields():
     keep = frappe.db.get_value("Custom Field", {"dt": "Employee", "fieldname": "ess_transport_mode"}, "options")
@@ -68,6 +73,7 @@ def make_custom_fields():
             "Employee Checkin": _chain("Employee Checkin", CHECKIN_FIELDS),
             "Employee": _chain("Employee", EMPLOYEE_FIELDS),
             "Expense Claim": _chain("Expense Claim", EXPENSE_CLAIM_FIELDS),
+            "Expense Claim Detail": _chain("Expense Claim Detail", EXPENSE_CLAIM_DETAIL_FIELDS),
         },
         update=True,
     )

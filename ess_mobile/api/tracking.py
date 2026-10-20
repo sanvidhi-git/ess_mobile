@@ -174,7 +174,8 @@ def recompute_trip(trip, save: bool = True):
 @frappe.whitelist(methods=["GET"])
 def get_trips(limit: int = 30, start: int = 0):
     emp = current_employee()
-    return frappe.get_all(
+    min_km = flt(settings().min_claim_km)
+    rows = frappe.get_all(
         "ESS Trip",
         filters={"employee": emp.name},
         fields=["name", "status", "trip_date", "start_time", "end_time", "distance_km", "expense_claim",
@@ -183,6 +184,11 @@ def get_trips(limit: int = 30, start: int = 0):
         limit_start=cint(start),
         limit_page_length=min(cint(limit) or 30, 100),
     )
+    for r in rows:
+        r["claimable"] = cint(r.status != "Active" and not r.expense_claim and flt(r.distance_km) > 0
+                              and flt(r.distance_km) >= min_km)
+        r["below_minimum"] = cint(r.status != "Active" and not r.expense_claim and flt(r.distance_km) < min_km)
+    return rows
 
 
 @frappe.whitelist(methods=["GET"])

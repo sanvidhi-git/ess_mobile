@@ -366,3 +366,58 @@ def get_holidays(year: int | None = None, include_weekly_off: int = 0):
     if not cint(include_weekly_off):
         rows = [r for r in rows if not r["weekly_off"]]
     return rows
+
+
+@frappe.whitelist(methods=["GET"])
+def home_summary():
+    """This month at a glance for the app's home screen."""
+    emp = current_employee()
+    today = getdate(nowdate())
+    start = today.replace(day=1)
+    att = frappe.get_all("Attendance", filters={"employee": emp.name, "docstatus": 1,
+                                                "attendance_date": ["between", [start, today]]},
+                         fields=["status", "working_hours"])
+    present = sum(1 for a in att if a.status in ("Present", "Work From Home"))
+    half = sum(1 for a in att if a.status == "Half Day")
+    hours = sum(flt(a.working_hours) for a in att)
+    punch_days = len({getdate(t) for t in frappe.get_all(
+        "Employee Checkin", filters={"employee": emp.name, "time": [">=", f"{start} 00:00:00"]}, pluck="time")})
+
+    leave_left = None
+    try:
+        from hrms.hr.doctype.leave_application.leave_application import get_leave_details
+
+        alloc = (get_leave_details(emp.name, nowdate()).get("leave_allocation") or {})
+        leave_left = flt(sum(flt(v.get("remaining_leaves")) for v in alloc.values()), 1)
+    except Exception:
+        pass
+
+    drafts = frappe.get_all("Expense Claim", filters={"employee": emp.name, "docstatus": 0},
+                            fields=["total_claimed_amount", "approval_status"])
+    pending = frappe.get_all("Expense Claim", filters={"employee": emp.name, "docstatus": 1, "status": "Unpaid"},
+                             fields=["total_sanctioned_amount"])
+    s = settings()
+    unclaimed = frappe.get_all("ESS Trip", filters={"employee": emp.name, "status": ["!=", "Active"],
+                                                    "expense_claim": ["is", "not set"],
+                                                    "distance_km": [">=", max(flt(s.min_claim_km), 0.01)]},
+                               fields=["distance_km"])
+    hl_rows = []
+    hl = holiday_list_for(emp)
+    if hl:
+        hl_rows = frappe.get_all("Holiday", filters={"parent": hl, "holiday_date": [">=", today], "weekly_off": 0},
+                                 fields=["holiday_date", "description"], order_by="holiday_date asc", limit=1)
+    return {
+        "month": today.strftime("%B"),
+        "present_days": present,
+        "half_days": half,
+        "punch_days": punch_days,
+        "hours": flt(hours, 1),
+        "leave_left": leave_left,
+        "draft_claims": len(drafts),
+        "draft_amount": flt(sum(flt(d.total_claimed_amount) for d in drafts), 2),
+        "awaiting_payment": flt(sum(flt(p.total_sanctioned_amount) for p in pending), 2),
+        "unclaimed_trips": len(unclaimed),
+        "unclaimed_km": flt(sum(flt(u.distance_km) for u in unclaimed), 1),
+        "next_holiday": {"date": str(hl_rows[0].holiday_date),
+                         "name": frappe.utils.strip_html(hl_rows[0].description or "")} if hl_rows else None,
+    }

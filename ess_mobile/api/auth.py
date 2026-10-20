@@ -8,7 +8,7 @@ API key/secret pair which the app keeps in encrypted storage and sends as
 import frappe
 from frappe import _
 from frappe.rate_limiter import rate_limit
-from frappe.utils import cint, now_datetime
+from frappe.utils import cint, flt, now_datetime
 
 from ess_mobile.api.common import current_employee, ensure_enabled, settings
 
@@ -136,6 +136,7 @@ def _bootstrap(emp):
                                  "uses_odometer": m["uses_odometer"]} for m in tmodes],
             "transport_mode": (my_mode or {}).get("mode"),
             "odometer_capture": s.get("odometer_capture") or "Off",
+            "min_claim_km": flt(s.min_claim_km),
             "odometer_applies": cint(tracking and odometer_applies(emp, s)),
         },
         "geofences": applicable_geofences(emp),
